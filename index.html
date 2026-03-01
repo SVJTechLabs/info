@@ -1,949 +1,1758 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SVJ Tech Labs — Engineering Tomorrow</title>
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Syne:wght@300;400;500&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
-<style>
-  :root {
-    --bg: #020408;
-    --bg2: #060d15;
-    --cyan: #00f5ff;
-    --cyan-dim: rgba(0,245,255,0.15);
-    --cyan-glow: rgba(0,245,255,0.4);
-    --green: #00ff88;
-    --purple: #7b2fff;
-    --text: #c8d8e8;
-    --text-dim: #4a6070;
-    --white: #eaf4ff;
-  }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SVJ Tech Labs — Engineering Tomorrow</title>
+  <meta name="description"
+    content="SVJ Tech Labs is an AI-first technology company building intelligent web apps, mobile applications, and SaaS platforms that solve real problems.">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Syne:wght@300;400;500&family=JetBrains+Mono:wght@300;400&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --bg: #020408;
+      --bg2: #060d15;
+      --cyan: #00f5ff;
+      --cyan-dim: rgba(0, 245, 255, 0.15);
+      --cyan-glow: rgba(0, 245, 255, 0.4);
+      --green: #00ff88;
+      --purple: #7b2fff;
+      --text: #c8d8e8;
+      --text-dim: #4a6070;
+      --white: #eaf4ff;
+    }
 
-  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    *,
+    *::before,
+    *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-  html { scroll-behavior: smooth; }
+    html {
+      scroll-behavior: smooth;
+    }
 
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'Syne', sans-serif;
-    overflow-x: hidden;
-    cursor: none;
-  }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Syne', sans-serif;
+      overflow-x: hidden;
+      cursor: none;
+    }
 
-  /* Custom cursor */
-  .cursor {
-    position: fixed;
-    width: 12px; height: 12px;
-    background: var(--cyan);
-    border-radius: 50%;
-    pointer-events: none;
-    z-index: 9999;
-    mix-blend-mode: screen;
-    transition: transform 0.1s;
-  }
-  .cursor-ring {
-    position: fixed;
-    width: 36px; height: 36px;
-    border: 1px solid var(--cyan);
-    border-radius: 50%;
-    pointer-events: none;
-    z-index: 9998;
-    opacity: 0.5;
-    transition: transform 0.15s, width 0.2s, height 0.2s;
-  }
+    /* ── Touch / Mobile: restore normal cursor ── */
+    @media (hover: none) and (pointer: coarse) {
+      body {
+        cursor: auto;
+      }
 
-  /* Grid background */
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background-image:
-      linear-gradient(rgba(0,245,255,0.03) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(0,245,255,0.03) 1px, transparent 1px);
-    background-size: 60px 60px;
-    pointer-events: none;
-    z-index: 0;
-  }
+      .cursor,
+      .cursor-ring {
+        display: none !important;
+      }
 
-  /* NAV */
-  nav {
-    position: fixed;
-    top: 0; left: 0; right: 0;
-    z-index: 100;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 20px 60px;
-    background: rgba(2,4,8,0.8);
-    backdrop-filter: blur(16px);
-    border-bottom: 1px solid rgba(0,245,255,0.08);
-  }
+      a,
+      button,
+      [role="button"],
+      .service-card,
+      .product-card,
+      .nav-cta,
+      .btn-primary,
+      .btn-outline,
+      .form-submit,
+      .hamburger {
+        cursor: pointer !important;
+      }
+    }
 
-  .logo {
-    font-family: 'Orbitron', monospace;
-    font-weight: 900;
-    font-size: 1.3rem;
-    color: var(--white);
-    letter-spacing: 2px;
-    text-decoration: none;
-  }
-  .logo span { color: var(--cyan); }
+    /* Custom cursor (desktop only) */
+    .cursor {
+      position: fixed;
+      width: 12px;
+      height: 12px;
+      background: var(--cyan);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      mix-blend-mode: screen;
+      transition: transform 0.1s;
+    }
 
-  .nav-links {
-    display: flex;
-    gap: 40px;
-    list-style: none;
-  }
-  .nav-links a {
-    color: var(--text-dim);
-    text-decoration: none;
-    font-size: 0.8rem;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    font-family: 'JetBrains Mono', monospace;
-    transition: color 0.3s;
-    position: relative;
-  }
-  .nav-links a::after {
-    content: '';
-    position: absolute;
-    bottom: -4px; left: 0;
-    width: 0; height: 1px;
-    background: var(--cyan);
-    transition: width 0.3s;
-  }
-  .nav-links a:hover { color: var(--cyan); }
-  .nav-links a:hover::after { width: 100%; }
+    .cursor-ring {
+      position: fixed;
+      width: 36px;
+      height: 36px;
+      border: 1px solid var(--cyan);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9998;
+      opacity: 0.5;
+      transition: transform 0.15s, width 0.2s, height 0.2s;
+    }
 
-  .nav-cta {
-    padding: 8px 24px;
-    border: 1px solid var(--cyan);
-    color: var(--cyan);
-    text-decoration: none;
-    font-family: 'Orbitron', monospace;
-    font-size: 0.7rem;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    transition: all 0.3s;
-    position: relative;
-    overflow: hidden;
-  }
-  .nav-cta::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: var(--cyan);
-    transform: translateX(-100%);
-    transition: transform 0.3s;
-    z-index: -1;
-  }
-  .nav-cta:hover { color: var(--bg); }
-  .nav-cta:hover::before { transform: translateX(0); }
+    /* Grid background */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(0, 245, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 245, 255, 0.03) 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none;
+      z-index: 0;
+    }
 
-  /* HERO */
-  #hero {
-    position: relative;
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    text-align: center;
-    padding: 120px 40px 80px;
-    z-index: 1;
-    overflow: hidden;
-  }
+    /* ══════════════════════ NAV ══════════════════════ */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 60px;
+      background: rgba(2, 4, 8, 0.9);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(0, 245, 255, 0.08);
+      gap: 16px;
+    }
 
-  .hero-orb {
-    position: absolute;
-    width: 600px; height: 600px;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(0,245,255,0.06) 0%, transparent 70%);
-    top: 50%; left: 50%;
-    transform: translate(-50%, -50%);
-    animation: pulse-orb 4s ease-in-out infinite;
-  }
-  .hero-orb2 {
-    position: absolute;
-    width: 900px; height: 900px;
-    border-radius: 50%;
-    border: 1px solid rgba(0,245,255,0.05);
-    top: 50%; left: 50%;
-    transform: translate(-50%, -50%);
-    animation: rotate 30s linear infinite;
-  }
-  .hero-orb3 {
-    position: absolute;
-    width: 1100px; height: 1100px;
-    border-radius: 50%;
-    border: 1px solid rgba(123,47,255,0.05);
-    top: 50%; left: 50%;
-    transform: translate(-50%, -50%);
-    animation: rotate 50s linear infinite reverse;
-  }
+    .logo {
+      font-family: 'Orbitron', monospace;
+      font-weight: 900;
+      font-size: 1.3rem;
+      color: var(--white);
+      letter-spacing: 2px;
+      text-decoration: none;
+      flex-shrink: 0;
+    }
 
-  @keyframes pulse-orb {
-    0%, 100% { opacity: 0.5; transform: translate(-50%, -50%) scale(1); }
-    50% { opacity: 1; transform: translate(-50%, -50%) scale(1.1); }
-  }
-  @keyframes rotate {
-    from { transform: translate(-50%, -50%) rotate(0deg); }
-    to { transform: translate(-50%, -50%) rotate(360deg); }
-  }
+    .logo span {
+      color: var(--cyan);
+    }
 
-  .hero-badge {
-    display: inline-block;
-    padding: 6px 20px;
-    border: 1px solid rgba(0,245,255,0.3);
-    background: rgba(0,245,255,0.05);
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.7rem;
-    letter-spacing: 3px;
-    color: var(--cyan);
-    text-transform: uppercase;
-    margin-bottom: 32px;
-    animation: fadeUp 1s ease both;
-  }
+    .nav-links {
+      display: flex;
+      gap: 40px;
+      list-style: none;
+    }
 
-  .hero-title {
-    font-family: 'Orbitron', monospace;
-    font-size: clamp(2.8rem, 7vw, 6rem);
-    font-weight: 900;
-    line-height: 1.05;
-    color: var(--white);
-    margin-bottom: 12px;
-    animation: fadeUp 1s 0.2s ease both;
-  }
-  .hero-title .accent { color: var(--cyan); text-shadow: 0 0 40px var(--cyan-glow); }
+    .nav-links a {
+      color: var(--text-dim);
+      text-decoration: none;
+      font-size: 0.8rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      font-family: 'JetBrains Mono', monospace;
+      transition: color 0.3s;
+      position: relative;
+      white-space: nowrap;
+    }
 
-  .hero-sub {
-    font-size: clamp(1rem, 2vw, 1.4rem);
-    color: var(--text-dim);
-    margin-bottom: 20px;
-    font-weight: 300;
-    letter-spacing: 1px;
-    animation: fadeUp 1s 0.35s ease both;
-  }
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 0;
+      height: 1px;
+      background: var(--cyan);
+      transition: width 0.3s;
+    }
 
-  .hero-tagline {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.85rem;
-    color: var(--green);
-    margin-bottom: 56px;
-    animation: fadeUp 1s 0.45s ease both;
-    opacity: 0.8;
-  }
+    .nav-links a:hover {
+      color: var(--cyan);
+    }
 
-  .hero-buttons {
-    display: flex;
-    gap: 20px;
-    justify-content: center;
-    flex-wrap: wrap;
-    animation: fadeUp 1s 0.55s ease both;
-  }
+    .nav-links a:hover::after {
+      width: 100%;
+    }
 
-  .btn-primary {
-    padding: 16px 40px;
-    background: var(--cyan);
-    color: var(--bg);
-    font-family: 'Orbitron', monospace;
-    font-size: 0.75rem;
-    font-weight: 700;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    text-decoration: none;
-    border: none;
-    cursor: none;
-    transition: all 0.3s;
-    box-shadow: 0 0 30px var(--cyan-glow);
-  }
-  .btn-primary:hover { box-shadow: 0 0 60px var(--cyan-glow); transform: translateY(-2px); }
+    .nav-cta {
+      padding: 8px 24px;
+      border: 1px solid var(--cyan);
+      color: var(--cyan);
+      text-decoration: none;
+      font-family: 'Orbitron', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      transition: all 0.3s;
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
 
-  .btn-outline {
-    padding: 16px 40px;
-    border: 1px solid rgba(0,245,255,0.3);
-    color: var(--cyan);
-    font-family: 'Orbitron', monospace;
-    font-size: 0.75rem;
-    font-weight: 700;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    text-decoration: none;
-    cursor: none;
-    transition: all 0.3s;
-    background: transparent;
-  }
-  .btn-outline:hover { border-color: var(--cyan); background: var(--cyan-dim); transform: translateY(-2px); }
+    .nav-cta::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--cyan);
+      transform: translateX(-100%);
+      transition: transform 0.3s;
+      z-index: -1;
+    }
 
-  .hero-stats {
-    display: flex;
-    gap: 60px;
-    margin-top: 80px;
-    padding-top: 40px;
-    border-top: 1px solid rgba(0,245,255,0.08);
-    animation: fadeUp 1s 0.7s ease both;
-  }
-  .stat { text-align: center; }
-  .stat-num {
-    font-family: 'Orbitron', monospace;
-    font-size: 2rem;
-    font-weight: 900;
-    color: var(--cyan);
-    display: block;
-  }
-  .stat-label {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.65rem;
-    color: var(--text-dim);
-    text-transform: uppercase;
-    letter-spacing: 2px;
-  }
+    .nav-cta:hover {
+      color: var(--bg);
+    }
 
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(30px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
+    .nav-cta:hover::before {
+      transform: translateX(0);
+    }
 
-  /* SECTIONS */
-  section {
-    position: relative;
-    z-index: 1;
-    padding: 120px 60px;
-    max-width: 1200px;
-    margin: 0 auto;
-  }
+    /* Hamburger button */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      justify-content: space-between;
+      width: 28px;
+      height: 20px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0;
+      flex-shrink: 0;
+      z-index: 101;
+    }
 
-  .section-label {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.7rem;
-    color: var(--cyan);
-    letter-spacing: 4px;
-    text-transform: uppercase;
-    margin-bottom: 16px;
-    display: block;
-  }
+    .hamburger span {
+      display: block;
+      width: 100%;
+      height: 2px;
+      background: var(--cyan);
+      border-radius: 2px;
+      transition: all 0.3s ease;
+      transform-origin: center;
+    }
 
-  .section-title {
-    font-family: 'Orbitron', monospace;
-    font-size: clamp(1.8rem, 4vw, 3rem);
-    font-weight: 700;
-    color: var(--white);
-    line-height: 1.2;
-    margin-bottom: 20px;
-  }
+    /* Hamburger → X animation */
+    .hamburger.open span:nth-child(1) {
+      transform: translateY(9px) rotate(45deg);
+    }
 
-  .section-line {
-    width: 60px;
-    height: 2px;
-    background: linear-gradient(90deg, var(--cyan), transparent);
-    margin-bottom: 40px;
-  }
+    .hamburger.open span:nth-child(2) {
+      opacity: 0;
+      transform: scaleX(0);
+    }
 
-  /* ABOUT */
-  #about .about-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 80px;
-    align-items: center;
-  }
+    .hamburger.open span:nth-child(3) {
+      transform: translateY(-9px) rotate(-45deg);
+    }
 
-  .about-text p {
-    font-size: 1rem;
-    line-height: 1.9;
-    color: var(--text);
-    margin-bottom: 20px;
-    font-weight: 300;
-  }
+    /* Mobile menu overlay */
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      inset: 0;
+      top: 63px;
+      background: rgba(2, 4, 8, 0.97);
+      backdrop-filter: blur(20px);
+      z-index: 99;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 40px;
+      padding: 40px;
+    }
 
-  .about-visual {
-    position: relative;
-    height: 380px;
-  }
+    .mobile-menu.open {
+      display: flex;
+    }
 
-  .about-box {
-    position: absolute;
-    border: 1px solid rgba(0,245,255,0.15);
-    background: rgba(0,245,255,0.03);
-    padding: 24px;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.75rem;
-    color: var(--cyan);
-    line-height: 1.8;
-  }
-  .about-box:nth-child(1) { top: 0; left: 0; right: 60px; }
-  .about-box:nth-child(2) { bottom: 0; right: 0; left: 60px; top: 160px; border-color: rgba(123,47,255,0.2); color: #b48aff; background: rgba(123,47,255,0.03); }
-  .about-box .box-title { color: var(--white); font-weight: 700; font-size: 0.8rem; margin-bottom: 12px; letter-spacing: 1px; }
+    .mobile-menu a {
+      font-family: 'Orbitron', monospace;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--white);
+      text-decoration: none;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      transition: color 0.3s;
+      padding: 8px 0;
+      border-bottom: 1px solid rgba(0, 245, 255, 0.1);
+      width: 100%;
+      text-align: center;
+    }
 
-  /* SERVICES */
-  #services { background: none; }
-  #services .services-wrap {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 120px 60px;
-  }
-  #services { padding: 0; max-width: 100%; }
-  .services-inner { max-width: 1200px; margin: 0 auto; padding: 120px 60px; }
+    .mobile-menu a:hover {
+      color: var(--cyan);
+    }
 
-  .services-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 2px;
-    margin-top: 60px;
-    border: 1px solid rgba(0,245,255,0.08);
-  }
+    .mobile-menu .mobile-cta {
+      padding: 16px 48px;
+      border: 1px solid var(--cyan);
+      color: var(--cyan);
+      background: var(--cyan-dim);
+      font-size: 1rem;
+      border-bottom: 1px solid var(--cyan);
+      margin-top: 8px;
+    }
 
-  .service-card {
-    padding: 48px 36px;
-    background: rgba(6,13,21,0.8);
-    border: 1px solid rgba(0,245,255,0.06);
-    position: relative;
-    overflow: hidden;
-    transition: all 0.4s;
-    cursor: none;
-  }
-  .service-card::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 2px;
-    background: linear-gradient(90deg, var(--cyan), transparent);
-    transform: scaleX(0);
-    transform-origin: left;
-    transition: transform 0.4s;
-  }
-  .service-card:hover { background: rgba(0,245,255,0.03); transform: translateY(-4px); }
-  .service-card:hover::before { transform: scaleX(1); }
+    .mobile-menu .mobile-cta:hover {
+      background: var(--cyan);
+      color: var(--bg);
+    }
 
-  .service-icon {
-    font-size: 2rem;
-    margin-bottom: 20px;
-    display: block;
-    filter: grayscale(0.3);
-  }
-  .service-num {
-    position: absolute;
-    top: 20px; right: 24px;
-    font-family: 'Orbitron', monospace;
-    font-size: 3rem;
-    font-weight: 900;
-    color: rgba(0,245,255,0.04);
-    line-height: 1;
-  }
-  .service-title {
-    font-family: 'Orbitron', monospace;
-    font-size: 0.95rem;
-    font-weight: 700;
-    color: var(--white);
-    margin-bottom: 16px;
-    letter-spacing: 1px;
-  }
-  .service-desc {
-    font-size: 0.88rem;
-    line-height: 1.8;
-    color: var(--text-dim);
-    font-weight: 300;
-  }
+    /* ══════════════════════ HERO ══════════════════════ */
+    #hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      text-align: center;
+      padding: 120px 24px 80px;
+      z-index: 1;
+      overflow: hidden;
+    }
 
-  /* PRODUCTS */
-  .products-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 24px;
-    margin-top: 60px;
-  }
+    .hero-orb {
+      position: absolute;
+      width: 600px;
+      height: 600px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(0, 245, 255, 0.06) 0%, transparent 70%);
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      animation: pulse-orb 4s ease-in-out infinite;
+      max-width: 100vw;
+      max-height: 100vw;
+    }
 
-  .product-card {
-    border: 1px solid rgba(0,245,255,0.1);
-    background: linear-gradient(135deg, rgba(6,13,21,0.9), rgba(2,4,8,0.9));
-    padding: 40px;
-    position: relative;
-    overflow: hidden;
-    transition: all 0.4s;
-    cursor: none;
-  }
-  .product-card::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(circle at top right, rgba(0,245,255,0.05), transparent 60%);
-    opacity: 0;
-    transition: opacity 0.4s;
-  }
-  .product-card:hover { border-color: rgba(0,245,255,0.25); }
-  .product-card:hover::after { opacity: 1; }
+    .hero-orb2 {
+      position: absolute;
+      width: min(900px, 150vw);
+      height: min(900px, 150vw);
+      border-radius: 50%;
+      border: 1px solid rgba(0, 245, 255, 0.05);
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      animation: rotate 30s linear infinite;
+    }
 
-  .product-status {
-    display: inline-block;
-    padding: 4px 12px;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.6rem;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    margin-bottom: 20px;
-    border-radius: 2px;
-  }
-  .status-live { background: rgba(0,255,136,0.1); color: var(--green); border: 1px solid rgba(0,255,136,0.2); }
-  .status-dev { background: rgba(0,245,255,0.1); color: var(--cyan); border: 1px solid rgba(0,245,255,0.2); }
-  .status-coming { background: rgba(123,47,255,0.1); color: #b48aff; border: 1px solid rgba(123,47,255,0.2); }
+    .hero-orb3 {
+      position: absolute;
+      width: min(1100px, 180vw);
+      height: min(1100px, 180vw);
+      border-radius: 50%;
+      border: 1px solid rgba(123, 47, 255, 0.05);
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      animation: rotate 50s linear infinite reverse;
+    }
 
-  .product-title {
-    font-family: 'Orbitron', monospace;
-    font-size: 1.2rem;
-    font-weight: 700;
-    color: var(--white);
-    margin-bottom: 12px;
-  }
-  .product-desc {
-    font-size: 0.88rem;
-    line-height: 1.8;
-    color: var(--text-dim);
-    font-weight: 300;
-    margin-bottom: 24px;
-  }
-  .product-tags {
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-  }
-  .tag {
-    padding: 3px 10px;
-    background: rgba(0,245,255,0.06);
-    border: 1px solid rgba(0,245,255,0.1);
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.6rem;
-    color: var(--text-dim);
-    letter-spacing: 1px;
-  }
+    @keyframes pulse-orb {
 
-  /* CONTACT */
-  #contact .contact-wrap {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 80px;
-    align-items: start;
-  }
+      0%,
+      100% {
+        opacity: 0.5;
+        transform: translate(-50%, -50%) scale(1);
+      }
 
-  .contact-info p {
-    font-size: 0.95rem;
-    line-height: 1.9;
-    color: var(--text-dim);
-    font-weight: 300;
-    margin-bottom: 40px;
-  }
+      50% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1.1);
+      }
+    }
 
-  .contact-item {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    margin-bottom: 20px;
-    padding: 16px 20px;
-    border: 1px solid rgba(0,245,255,0.08);
-    background: rgba(0,245,255,0.02);
-    transition: border-color 0.3s;
-  }
-  .contact-item:hover { border-color: rgba(0,245,255,0.2); }
-  .contact-icon { font-size: 1.2rem; }
-  .contact-detail { font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; color: var(--cyan); }
-  .contact-label { font-size: 0.7rem; color: var(--text-dim); letter-spacing: 1px; text-transform: uppercase; }
+    @keyframes rotate {
+      from {
+        transform: translate(-50%, -50%) rotate(0deg);
+      }
 
-  .contact-form { display: flex; flex-direction: column; gap: 16px; }
+      to {
+        transform: translate(-50%, -50%) rotate(360deg);
+      }
+    }
 
-  .form-group { display: flex; flex-direction: column; gap: 8px; }
-  .form-label {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.65rem;
-    color: var(--cyan);
-    letter-spacing: 2px;
-    text-transform: uppercase;
-  }
-  .form-input, .form-textarea {
-    background: rgba(6,13,21,0.9);
-    border: 1px solid rgba(0,245,255,0.12);
-    color: var(--white);
-    padding: 14px 18px;
-    font-family: 'Syne', sans-serif;
-    font-size: 0.9rem;
-    outline: none;
-    transition: border-color 0.3s;
-    resize: none;
-  }
-  .form-input:focus, .form-textarea:focus { border-color: var(--cyan); box-shadow: 0 0 20px rgba(0,245,255,0.05); }
-  .form-textarea { height: 130px; }
+    .hero-badge {
+      display: inline-block;
+      padding: 6px 20px;
+      border: 1px solid rgba(0, 245, 255, 0.3);
+      background: rgba(0, 245, 255, 0.05);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 3px;
+      color: var(--cyan);
+      text-transform: uppercase;
+      margin-bottom: 32px;
+      animation: fadeUp 1s ease both;
+      position: relative;
+      z-index: 1;
+    }
 
-  .form-submit {
-    padding: 16px;
-    background: var(--cyan);
-    color: var(--bg);
-    border: none;
-    font-family: 'Orbitron', monospace;
-    font-size: 0.8rem;
-    font-weight: 700;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    cursor: none;
-    transition: all 0.3s;
-    box-shadow: 0 0 20px rgba(0,245,255,0.2);
-  }
-  .form-submit:hover { box-shadow: 0 0 40px rgba(0,245,255,0.4); }
+    .hero-title {
+      font-family: 'Orbitron', monospace;
+      font-size: clamp(2.2rem, 7vw, 6rem);
+      font-weight: 900;
+      line-height: 1.05;
+      color: var(--white);
+      margin-bottom: 12px;
+      animation: fadeUp 1s 0.2s ease both;
+      position: relative;
+      z-index: 1;
+    }
 
-  /* FOOTER */
-  footer {
-    position: relative;
-    z-index: 1;
-    border-top: 1px solid rgba(0,245,255,0.08);
-    padding: 40px 60px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-  .footer-logo {
-    font-family: 'Orbitron', monospace;
-    font-weight: 900;
-    font-size: 1rem;
-    color: var(--white);
-    letter-spacing: 2px;
-  }
-  .footer-logo span { color: var(--cyan); }
-  .footer-copy {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.65rem;
-    color: var(--text-dim);
-    letter-spacing: 1px;
-  }
-  .footer-links { display: flex; gap: 24px; }
-  .footer-links a {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.65rem;
-    color: var(--text-dim);
-    text-decoration: none;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    transition: color 0.3s;
-  }
-  .footer-links a:hover { color: var(--cyan); }
+    .hero-title .accent {
+      color: var(--cyan);
+      text-shadow: 0 0 40px var(--cyan-glow);
+    }
 
-  /* DIVIDER */
-  .section-divider {
-    width: 100%;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(0,245,255,0.1), transparent);
-  }
+    .hero-sub {
+      font-size: clamp(0.95rem, 2vw, 1.4rem);
+      color: var(--text-dim);
+      margin-bottom: 20px;
+      font-weight: 300;
+      letter-spacing: 1px;
+      animation: fadeUp 1s 0.35s ease both;
+      position: relative;
+      z-index: 1;
+      max-width: 600px;
+    }
 
-  /* Scroll animations */
-  .reveal {
-    opacity: 0;
-    transform: translateY(40px);
-    transition: opacity 0.7s ease, transform 0.7s ease;
-  }
-  .reveal.visible { opacity: 1; transform: translateY(0); }
-</style>
+    .hero-tagline {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: clamp(0.7rem, 2vw, 0.85rem);
+      color: var(--green);
+      margin-bottom: 56px;
+      animation: fadeUp 1s 0.45s ease both;
+      opacity: 0.8;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+      animation: fadeUp 1s 0.55s ease both;
+      position: relative;
+      z-index: 1;
+    }
+
+    .btn-primary {
+      padding: 16px 36px;
+      background: var(--cyan);
+      color: var(--bg);
+      font-family: 'Orbitron', monospace;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s;
+      box-shadow: 0 0 30px var(--cyan-glow);
+      display: inline-block;
+    }
+
+    .btn-primary:hover {
+      box-shadow: 0 0 60px var(--cyan-glow);
+      transform: translateY(-2px);
+    }
+
+    .btn-outline {
+      padding: 16px 36px;
+      border: 1px solid rgba(0, 245, 255, 0.3);
+      color: var(--cyan);
+      font-family: 'Orbitron', monospace;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.3s;
+      background: transparent;
+      display: inline-block;
+    }
+
+    .btn-outline:hover {
+      border-color: var(--cyan);
+      background: var(--cyan-dim);
+      transform: translateY(-2px);
+    }
+
+    .hero-stats {
+      display: flex;
+      gap: 40px;
+      margin-top: 80px;
+      padding-top: 40px;
+      border-top: 1px solid rgba(0, 245, 255, 0.08);
+      animation: fadeUp 1s 0.7s ease both;
+      flex-wrap: wrap;
+      justify-content: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .stat {
+      text-align: center;
+    }
+
+    .stat-num {
+      font-family: 'Orbitron', monospace;
+      font-size: clamp(1.4rem, 4vw, 2rem);
+      font-weight: 900;
+      color: var(--cyan);
+      display: block;
+    }
+
+    .stat-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* ══════════════════════ SECTIONS ══════════════════════ */
+    section {
+      position: relative;
+      z-index: 1;
+      padding: 100px 60px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--cyan);
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+      display: block;
+    }
+
+    .section-title {
+      font-family: 'Orbitron', monospace;
+      font-size: clamp(1.5rem, 4vw, 3rem);
+      font-weight: 700;
+      color: var(--white);
+      line-height: 1.2;
+      margin-bottom: 20px;
+    }
+
+    .section-line {
+      width: 60px;
+      height: 2px;
+      background: linear-gradient(90deg, var(--cyan), transparent);
+      margin-bottom: 40px;
+    }
+
+    /* ══════════════════════ ABOUT ══════════════════════ */
+    #about .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+    }
+
+    .about-text p {
+      font-size: 1rem;
+      line-height: 1.9;
+      color: var(--text);
+      margin-bottom: 20px;
+      font-weight: 300;
+    }
+
+    .about-visual {
+      position: relative;
+      height: 380px;
+      min-height: 280px;
+    }
+
+    .about-box {
+      position: absolute;
+      border: 1px solid rgba(0, 245, 255, 0.15);
+      background: rgba(0, 245, 255, 0.03);
+      padding: 24px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--cyan);
+      line-height: 1.8;
+    }
+
+    .about-box:nth-child(1) {
+      top: 0;
+      left: 0;
+      right: 60px;
+    }
+
+    .about-box:nth-child(2) {
+      bottom: 0;
+      right: 0;
+      left: 60px;
+      top: 160px;
+      border-color: rgba(123, 47, 255, 0.2);
+      color: #b48aff;
+      background: rgba(123, 47, 255, 0.03);
+    }
+
+    .about-box .box-title {
+      color: var(--white);
+      font-weight: 700;
+      font-size: 0.8rem;
+      margin-bottom: 12px;
+      letter-spacing: 1px;
+    }
+
+    /* ══════════════════════ SERVICES ══════════════════════ */
+    #services {
+      padding: 0;
+      max-width: 100%;
+    }
+
+    .services-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 100px 60px;
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+      margin-top: 60px;
+      border: 1px solid rgba(0, 245, 255, 0.08);
+    }
+
+    .service-card {
+      padding: 48px 36px;
+      background: rgba(6, 13, 21, 0.8);
+      border: 1px solid rgba(0, 245, 255, 0.06);
+      position: relative;
+      overflow: hidden;
+      transition: all 0.4s;
+      cursor: pointer;
+    }
+
+    .service-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--cyan), transparent);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.4s;
+    }
+
+    .service-card:hover {
+      background: rgba(0, 245, 255, 0.03);
+      transform: translateY(-4px);
+    }
+
+    .service-card:hover::before {
+      transform: scaleX(1);
+    }
+
+    .service-icon {
+      font-size: 2rem;
+      margin-bottom: 20px;
+      display: block;
+      filter: grayscale(0.3);
+    }
+
+    .service-num {
+      position: absolute;
+      top: 20px;
+      right: 24px;
+      font-family: 'Orbitron', monospace;
+      font-size: 3rem;
+      font-weight: 900;
+      color: rgba(0, 245, 255, 0.04);
+      line-height: 1;
+    }
+
+    .service-title {
+      font-family: 'Orbitron', monospace;
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 16px;
+      letter-spacing: 1px;
+    }
+
+    .service-desc {
+      font-size: 0.88rem;
+      line-height: 1.8;
+      color: var(--text-dim);
+      font-weight: 300;
+    }
+
+    /* ══════════════════════ PRODUCTS ══════════════════════ */
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+      margin-top: 60px;
+    }
+
+    .product-card {
+      border: 1px solid rgba(0, 245, 255, 0.1);
+      background: linear-gradient(135deg, rgba(6, 13, 21, 0.9), rgba(2, 4, 8, 0.9));
+      padding: 40px;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.4s;
+      cursor: pointer;
+    }
+
+    .product-card::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at top right, rgba(0, 245, 255, 0.05), transparent 60%);
+      opacity: 0;
+      transition: opacity 0.4s;
+    }
+
+    .product-card:hover {
+      border-color: rgba(0, 245, 255, 0.25);
+    }
+
+    .product-card:hover::after {
+      opacity: 1;
+    }
+
+    .product-status {
+      display: inline-block;
+      padding: 4px 12px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+      border-radius: 2px;
+    }
+
+    .status-live {
+      background: rgba(0, 255, 136, 0.1);
+      color: var(--green);
+      border: 1px solid rgba(0, 255, 136, 0.2);
+    }
+
+    .status-dev {
+      background: rgba(0, 245, 255, 0.1);
+      color: var(--cyan);
+      border: 1px solid rgba(0, 245, 255, 0.2);
+    }
+
+    .status-coming {
+      background: rgba(123, 47, 255, 0.1);
+      color: #b48aff;
+      border: 1px solid rgba(123, 47, 255, 0.2);
+    }
+
+    .product-title {
+      font-family: 'Orbitron', monospace;
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 12px;
+    }
+
+    .product-desc {
+      font-size: 0.88rem;
+      line-height: 1.8;
+      color: var(--text-dim);
+      font-weight: 300;
+      margin-bottom: 24px;
+    }
+
+    .product-tags {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .tag {
+      padding: 3px 10px;
+      background: rgba(0, 245, 255, 0.06);
+      border: 1px solid rgba(0, 245, 255, 0.1);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.6rem;
+      color: var(--text-dim);
+      letter-spacing: 1px;
+    }
+
+    /* ══════════════════════ CONTACT ══════════════════════ */
+    #contact .contact-wrap {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: start;
+    }
+
+    .contact-info p {
+      font-size: 0.95rem;
+      line-height: 1.9;
+      color: var(--text-dim);
+      font-weight: 300;
+      margin-bottom: 40px;
+    }
+
+    .contact-item {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 16px;
+      padding: 16px 20px;
+      border: 1px solid rgba(0, 245, 255, 0.08);
+      background: rgba(0, 245, 255, 0.02);
+      transition: border-color 0.3s;
+    }
+
+    .contact-item:hover {
+      border-color: rgba(0, 245, 255, 0.2);
+    }
+
+    .contact-icon {
+      font-size: 1.2rem;
+      flex-shrink: 0;
+    }
+
+    .contact-detail {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      color: var(--cyan);
+      word-break: break-all;
+    }
+
+    .contact-label {
+      font-size: 0.7rem;
+      color: var(--text-dim);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .contact-form {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .form-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem;
+      color: var(--cyan);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .form-input,
+    .form-textarea {
+      background: rgba(6, 13, 21, 0.9);
+      border: 1px solid rgba(0, 245, 255, 0.12);
+      color: var(--white);
+      padding: 14px 18px;
+      font-family: 'Syne', sans-serif;
+      font-size: 0.9rem;
+      outline: none;
+      transition: border-color 0.3s;
+      resize: none;
+      width: 100%;
+      -webkit-appearance: none;
+      border-radius: 0;
+    }
+
+    .form-input::placeholder,
+    .form-textarea::placeholder {
+      color: var(--text-dim);
+    }
+
+    .form-input:focus,
+    .form-textarea:focus {
+      border-color: var(--cyan);
+      box-shadow: 0 0 20px rgba(0, 245, 255, 0.05);
+    }
+
+    .form-textarea {
+      height: 130px;
+    }
+
+    .form-submit {
+      padding: 16px;
+      background: var(--cyan);
+      color: var(--bg);
+      border: none;
+      font-family: 'Orbitron', monospace;
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.3s;
+      box-shadow: 0 0 20px rgba(0, 245, 255, 0.2);
+      width: 100%;
+      -webkit-appearance: none;
+      border-radius: 0;
+      min-height: 52px;
+    }
+
+    .form-submit:hover {
+      box-shadow: 0 0 40px rgba(0, 245, 255, 0.4);
+    }
+
+    .form-submit:active {
+      transform: scale(0.98);
+    }
+
+    /* Toast notification */
+    .toast {
+      position: fixed;
+      bottom: 32px;
+      left: 50%;
+      transform: translateX(-50%) translateY(120px);
+      background: var(--green);
+      color: #020408;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      padding: 14px 32px;
+      border-radius: 2px;
+      z-index: 9999;
+      transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      white-space: nowrap;
+    }
+
+    .toast.show {
+      transform: translateX(-50%) translateY(0);
+    }
+
+    /* ══════════════════════ FOOTER ══════════════════════ */
+    footer {
+      position: relative;
+      z-index: 1;
+      border-top: 1px solid rgba(0, 245, 255, 0.08);
+      padding: 40px 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .footer-logo {
+      font-family: 'Orbitron', monospace;
+      font-weight: 900;
+      font-size: 1rem;
+      color: var(--white);
+      letter-spacing: 2px;
+    }
+
+    .footer-logo span {
+      color: var(--cyan);
+    }
+
+    .footer-copy {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem;
+      color: var(--text-dim);
+      letter-spacing: 1px;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+
+    .footer-links a {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem;
+      color: var(--text-dim);
+      text-decoration: none;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      transition: color 0.3s;
+    }
+
+    .footer-links a:hover {
+      color: var(--cyan);
+    }
+
+    /* DIVIDER */
+    .section-divider {
+      width: 100%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(0, 245, 255, 0.1), transparent);
+    }
+
+    /* Scroll animations */
+    .reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ══════════════════════════════════════════════════════
+     RESPONSIVE BREAKPOINTS
+  ══════════════════════════════════════════════════════ */
+
+    /* ── Tablet — 1024px ── */
+    @media (max-width: 1024px) {
+      nav {
+        padding: 18px 32px;
+      }
+
+      .nav-links {
+        gap: 24px;
+      }
+
+      section {
+        padding: 80px 32px;
+      }
+
+      .services-inner {
+        padding: 80px 32px;
+      }
+
+      #about .about-grid {
+        gap: 48px;
+      }
+
+      .services-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .products-grid {
+        gap: 16px;
+      }
+
+      footer {
+        padding: 32px 32px;
+      }
+    }
+
+    /* ── Small Tablet — 768px ── */
+    @media (max-width: 768px) {
+
+      /* Nav */
+      nav {
+        padding: 16px 20px;
+      }
+
+      .nav-links {
+        display: none;
+      }
+
+      .nav-cta {
+        display: none;
+      }
+
+      .hamburger {
+        display: flex;
+      }
+
+      /* Hero */
+      #hero {
+        padding: 100px 20px 60px;
+      }
+
+      .hero-stats {
+        gap: 24px;
+        margin-top: 48px;
+      }
+
+      .stat {
+        min-width: 80px;
+      }
+
+      /* About */
+      #about .about-grid {
+        grid-template-columns: 1fr;
+        gap: 48px;
+      }
+
+      .about-visual {
+        height: auto;
+        min-height: 0;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
+
+      .about-box {
+        position: relative !important;
+        top: auto !important;
+        left: auto !important;
+        right: auto !important;
+        bottom: auto !important;
+        width: 100%;
+      }
+
+      /* Services */
+      .services-inner {
+        padding: 60px 20px;
+      }
+
+      .services-grid {
+        grid-template-columns: 1fr;
+        border: none;
+        gap: 16px;
+      }
+
+      .service-card {
+        padding: 32px 24px;
+      }
+
+      /* Products */
+      .products-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .product-card {
+        padding: 28px 24px;
+      }
+
+      /* Contact */
+      #contact .contact-wrap {
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
+
+      /* Sections */
+      section {
+        padding: 60px 20px;
+      }
+
+      /* Footer */
+      footer {
+        flex-direction: column;
+        text-align: center;
+        align-items: center;
+        padding: 32px 20px;
+      }
+
+      .footer-links {
+        justify-content: center;
+      }
+    }
+
+    /* ── Mobile — 480px ── */
+    @media (max-width: 480px) {
+
+      /* Logo smaller */
+      .logo {
+        font-size: 1rem;
+        letter-spacing: 1px;
+      }
+
+      /* Hero */
+      #hero {
+        padding: 90px 16px 48px;
+      }
+
+      .hero-badge {
+        font-size: 0.6rem;
+        letter-spacing: 2px;
+        padding: 5px 14px;
+      }
+
+      .hero-tagline {
+        margin-bottom: 40px;
+        padding: 0 8px;
+      }
+
+      .hero-buttons {
+        gap: 12px;
+      }
+
+      .btn-primary,
+      .btn-outline {
+        padding: 14px 24px;
+        font-size: 0.7rem;
+      }
+
+      .hero-stats {
+        gap: 16px;
+        padding-top: 24px;
+        margin-top: 36px;
+      }
+
+      /* Section paddings */
+      section {
+        padding: 48px 16px;
+      }
+
+      .services-inner {
+        padding: 48px 16px;
+      }
+
+      /* Service cards */
+      .service-card {
+        padding: 28px 20px;
+      }
+
+      .service-title {
+        font-size: 0.85rem;
+      }
+
+      .service-desc {
+        font-size: 0.82rem;
+      }
+
+      /* Product cards */
+      .product-card {
+        padding: 24px 18px;
+      }
+
+      .product-title {
+        font-size: 1rem;
+      }
+
+      /* Contact form */
+      .form-input,
+      .form-textarea {
+        padding: 12px 14px;
+        font-size: 0.85rem;
+      }
+
+      /* Footer */
+      footer {
+        gap: 16px;
+        padding: 28px 16px;
+      }
+
+      .footer-links {
+        gap: 16px;
+      }
+
+      /* Mobile menu links */
+      .mobile-menu a {
+        font-size: 1.2rem;
+      }
+
+      /* Stats grid on very small screens */
+      .hero-stats {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        width: 100%;
+      }
+
+      .stat {
+        padding: 8px;
+      }
+    }
+
+    /* ── Very small — 360px ── */
+    @media (max-width: 360px) {
+      .logo {
+        font-size: 0.85rem;
+      }
+
+      .hero-title {
+        font-size: 1.9rem;
+      }
+
+      .btn-primary,
+      .btn-outline {
+        padding: 12px 18px;
+        width: 100%;
+        text-align: center;
+      }
+
+      .hero-buttons {
+        flex-direction: column;
+        width: 100%;
+      }
+    }
+  </style>
 </head>
+
 <body>
 
-<div class="cursor" id="cursor"></div>
-<div class="cursor-ring" id="cursorRing"></div>
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
 
-<!-- NAV -->
-<nav>
-  <a class="logo" href="#hero">SVJ <span>TECH</span> LABS</a>
-  <ul class="nav-links">
-    <li><a href="#about">About</a></li>
-    <li><a href="#services">Services</a></li>
-    <li><a href="#products">Products</a></li>
-    <li><a href="#contact">Contact</a></li>
-  </ul>
-  <a href="#contact" class="nav-cta">Get In Touch</a>
-</nav>
+  <!-- Toast -->
+  <div class="toast" id="toast">✓ Message sent successfully!</div>
 
-<!-- HERO -->
-<div id="hero">
-  <div class="hero-orb"></div>
-  <div class="hero-orb2"></div>
-  <div class="hero-orb3"></div>
-  <div class="hero-badge">⬡ Established 2025 &nbsp;·&nbsp; AI-First Company</div>
-  <h1 class="hero-title">Engineering<br><span class="accent">Tomorrow's</span><br>Digital World</h1>
-  <p class="hero-sub">We build intelligent apps & platforms powered by AI</p>
-  <p class="hero-tagline">// SVJ Tech Labs — Where Code Meets Intelligence</p>
-  <div class="hero-buttons">
-    <a href="#products" class="btn-primary">View Our Products</a>
-    <a href="#contact" class="btn-outline">Partner With Us</a>
+  <!-- NAV -->
+  <nav>
+    <a class="logo" href="#hero">SVJ <span>TECH</span> LABS</a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#about">About</a></li>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#products">Products</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <a href="#contact" class="nav-cta">Get In Touch</a>
+    <button class="hamburger" id="hamburger" aria-label="Toggle navigation" aria-expanded="false">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  </nav>
+
+  <!-- Mobile Menu -->
+  <div class="mobile-menu" id="mobileMenu" role="navigation" aria-label="Mobile navigation">
+    <a href="#about" class="mobile-nav-link">About</a>
+    <a href="#services" class="mobile-nav-link">Services</a>
+    <a href="#products" class="mobile-nav-link">Products</a>
+    <a href="#contact" class="mobile-nav-link">Contact</a>
+    <a href="#contact" class="mobile-nav-link mobile-cta">Get In Touch</a>
   </div>
-  <div class="hero-stats">
-    <div class="stat">
-      <span class="stat-num">AI</span>
-      <span class="stat-label">First Approach</span>
-    </div>
-    <div class="stat">
-      <span class="stat-num">∞</span>
-      <span class="stat-label">Ideas in Pipeline</span>
-    </div>
-    <div class="stat">
-      <span class="stat-num">24/7</span>
-      <span class="stat-label">Building Mode</span>
-    </div>
-    <div class="stat">
-      <span class="stat-num">0→1</span>
-      <span class="stat-label">Product Philosophy</span>
-    </div>
-  </div>
-</div>
 
-<div class="section-divider"></div>
-
-<!-- ABOUT -->
-<section id="about">
-  <div class="about-grid">
-    <div class="about-text reveal">
-      <span class="section-label">// 001 — About Us</span>
-      <h2 class="section-title">We Don't Just Build Apps.<br>We Build <span style="color:var(--cyan)">Futures.</span></h2>
-      <div class="section-line"></div>
-      <p>SVJ Tech Labs is an AI-first technology company focused on creating powerful, scalable digital products. We harness cutting-edge artificial intelligence to build web and mobile applications that solve real problems — and generate real revenue.</p>
-      <p>Our mission is simple: move fast, build smart, and launch products that matter. Every tool we create is designed to reach users, deliver value, and grow sustainably.</p>
-      <p>We are a lean, focused team driven by innovation — combining deep technical knowledge with a builder's mindset to bring ideas from zero to launch at speed.</p>
+  <!-- HERO -->
+  <div id="hero">
+    <div class="hero-orb"></div>
+    <div class="hero-orb2"></div>
+    <div class="hero-orb3"></div>
+    <div class="hero-badge">⬡ Established 2025 &nbsp;·&nbsp; AI-First Company</div>
+    <h1 class="hero-title">Engineering<br><span class="accent">Tomorrow's</span><br>Digital World</h1>
+    <p class="hero-sub">We build intelligent apps &amp; platforms powered by AI</p>
+    <p class="hero-tagline">// SVJ Tech Labs — Where Code Meets Intelligence</p>
+    <div class="hero-buttons">
+      <a href="#products" class="btn-primary">View Our Products</a>
+      <a href="#contact" class="btn-outline">Partner With Us</a>
     </div>
-    <div class="about-visual reveal">
-      <div class="about-box">
-        <div class="box-title">CORE_PHILOSOPHY.md</div>
-        > Build AI-powered tools<br>
-        > Ship fast, iterate faster<br>
-        > Focus on monetization<br>
-        > Create real user value<br>
-        > Think global, launch smart<br>
-        <br>
-        <span style="color:var(--green)">STATUS: ACTIVE & BUILDING</span>
+    <div class="hero-stats">
+      <div class="stat">
+        <span class="stat-num">AI</span>
+        <span class="stat-label">First Approach</span>
       </div>
-      <div class="about-box">
-        <div class="box-title" style="color:#b48aff">TECH_STACK.config</div>
-        FRONTEND → React / Next.js / HTML5<br>
-        BACKEND → Node / Python / APIs<br>
-        AI ENGINE → Claude / GPT / Custom<br>
-        DEPLOY → Cloud / Web / Mobile<br>
-        MONETIZE → Ads / SaaS / Freemium
+      <div class="stat">
+        <span class="stat-num">∞</span>
+        <span class="stat-label">Ideas in Pipeline</span>
+      </div>
+      <div class="stat">
+        <span class="stat-num">24/7</span>
+        <span class="stat-label">Building Mode</span>
+      </div>
+      <div class="stat">
+        <span class="stat-num">0→1</span>
+        <span class="stat-label">Product Philosophy</span>
       </div>
     </div>
   </div>
-</section>
 
-<div class="section-divider"></div>
+  <div class="section-divider"></div>
 
-<!-- SERVICES -->
-<section id="services" style="padding:0; max-width:100%;">
-  <div class="services-inner">
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="about-grid">
+      <div class="about-text reveal">
+        <span class="section-label">// 001 — About Us</span>
+        <h2 class="section-title">We Don't Just Build Apps.<br>We Build <span style="color:var(--cyan)">Futures.</span>
+        </h2>
+        <div class="section-line"></div>
+        <p>SVJ Tech Labs is an AI-first technology company focused on creating powerful, scalable digital products. We
+          harness cutting-edge artificial intelligence to build web and mobile applications that solve real problems —
+          and generate real revenue.</p>
+        <p>Our mission is simple: move fast, build smart, and launch products that matter. Every tool we create is
+          designed to reach users, deliver value, and grow sustainably.</p>
+        <p>We are a lean, focused team driven by innovation — combining deep technical knowledge with a builder's
+          mindset to bring ideas from zero to launch at speed.</p>
+      </div>
+      <div class="about-visual reveal">
+        <div class="about-box">
+          <div class="box-title">CORE_PHILOSOPHY.md</div>
+          &gt; Build AI-powered tools<br>
+          &gt; Ship fast, iterate faster<br>
+          &gt; Focus on monetization<br>
+          &gt; Create real user value<br>
+          &gt; Think global, launch smart<br>
+          <br>
+          <span style="color:var(--green)">STATUS: ACTIVE &amp; BUILDING</span>
+        </div>
+        <div class="about-box">
+          <div class="box-title" style="color:#b48aff">TECH_STACK.config</div>
+          FRONTEND → React / Next.js / HTML5<br>
+          BACKEND → Node / Python / APIs<br>
+          AI ENGINE → Claude / GPT / Custom<br>
+          DEPLOY → Cloud / Web / Mobile<br>
+          MONETIZE → Ads / SaaS / Freemium
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
+
+  <!-- SERVICES -->
+  <section id="services" style="padding:0; max-width:100%;">
+    <div class="services-inner">
+      <div class="reveal">
+        <span class="section-label">// 002 — Services</span>
+        <h2 class="section-title">What We Do</h2>
+        <div class="section-line"></div>
+      </div>
+      <div class="services-grid reveal">
+        <div class="service-card">
+          <span class="service-num">01</span>
+          <span class="service-icon">🤖</span>
+          <div class="service-title">AI-Powered Web Apps</div>
+          <p class="service-desc">We design and build intelligent web applications that leverage the latest AI models to
+            automate, personalize, and supercharge user experiences.</p>
+        </div>
+        <div class="service-card">
+          <span class="service-num">02</span>
+          <span class="service-icon">📱</span>
+          <div class="service-title">Mobile Application Dev</div>
+          <p class="service-desc">Cross-platform mobile apps built for performance and scale. From idea to App Store —
+            we handle the full product lifecycle.</p>
+        </div>
+        <div class="service-card">
+          <span class="service-num">03</span>
+          <span class="service-icon">⚡</span>
+          <div class="service-title">SaaS Product Launch</div>
+          <p class="service-desc">We build and launch SaaS platforms with built-in monetization — subscription models,
+            freemium funnels, and growth-ready infrastructure.</p>
+        </div>
+        <div class="service-card">
+          <span class="service-num">04</span>
+          <span class="service-icon">🧠</span>
+          <div class="service-title">AI Integration &amp; Automation</div>
+          <p class="service-desc">We integrate AI into existing workflows and platforms — from chatbots to intelligent
+            data pipelines and custom model solutions.</p>
+        </div>
+        <div class="service-card">
+          <span class="service-num">05</span>
+          <span class="service-icon">💰</span>
+          <div class="service-title">Monetization Strategy</div>
+          <p class="service-desc">Every product we build is designed to earn. We architect revenue models from day one —
+            ads, subscriptions, affiliate, and licensing.</p>
+        </div>
+        <div class="service-card">
+          <span class="service-num">06</span>
+          <span class="service-icon">🚀</span>
+          <div class="service-title">Rapid Prototyping</div>
+          <p class="service-desc">We move at startup speed. From concept to working prototype in days, not months — so
+            you can validate, iterate, and launch faster.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
+
+  <!-- PRODUCTS -->
+  <section id="products">
     <div class="reveal">
-      <span class="section-label">// 002 — Services</span>
-      <h2 class="section-title">What We Do</h2>
+      <span class="section-label">// 003 — Products &amp; Apps</span>
+      <h2 class="section-title">What We're Building</h2>
       <div class="section-line"></div>
     </div>
-    <div class="services-grid reveal">
-      <div class="service-card">
-        <span class="service-num">01</span>
-        <span class="service-icon">🤖</span>
-        <div class="service-title">AI-Powered Web Apps</div>
-        <p class="service-desc">We design and build intelligent web applications that leverage the latest AI models to automate, personalize, and supercharge user experiences.</p>
-      </div>
-      <div class="service-card">
-        <span class="service-num">02</span>
-        <span class="service-icon">📱</span>
-        <div class="service-title">Mobile Application Dev</div>
-        <p class="service-desc">Cross-platform mobile apps built for performance and scale. From idea to App Store — we handle the full product lifecycle.</p>
-      </div>
-      <div class="service-card">
-        <span class="service-num">03</span>
-        <span class="service-icon">⚡</span>
-        <div class="service-title">SaaS Product Launch</div>
-        <p class="service-desc">We build and launch SaaS platforms with built-in monetization — subscription models, freemium funnels, and growth-ready infrastructure.</p>
-      </div>
-      <div class="service-card">
-        <span class="service-num">04</span>
-        <span class="service-icon">🧠</span>
-        <div class="service-title">AI Integration & Automation</div>
-        <p class="service-desc">We integrate AI into existing workflows and platforms — from chatbots to intelligent data pipelines and custom model solutions.</p>
-      </div>
-      <div class="service-card">
-        <span class="service-num">05</span>
-        <span class="service-icon">💰</span>
-        <div class="service-title">Monetization Strategy</div>
-        <p class="service-desc">Every product we build is designed to earn. We architect revenue models from day one — ads, subscriptions, affiliate, and licensing.</p>
-      </div>
-      <div class="service-card">
-        <span class="service-num">06</span>
-        <span class="service-icon">🚀</span>
-        <div class="service-title">Rapid Prototyping</div>
-        <p class="service-desc">We move at startup speed. From concept to working prototype in days, not months — so you can validate, iterate, and launch faster.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<div class="section-divider"></div>
-
-<!-- PRODUCTS -->
-<section id="products">
-  <div class="reveal">
-    <span class="section-label">// 003 — Products & Apps</span>
-    <h2 class="section-title">What We're Building</h2>
-    <div class="section-line"></div>
-  </div>
-  <div class="products-grid reveal">
-    <div class="product-card">
-      <span class="product-status status-dev">In Development</span>
-      <div class="product-title">SVJ AI Writer</div>
-      <p class="product-desc">An AI-powered content generation platform for blogs, ads, emails, and social media. Built for marketers, creators, and businesses who want to scale content output.</p>
-      <div class="product-tags">
-        <span class="tag">AI</span><span class="tag">SaaS</span><span class="tag">Content</span><span class="tag">Web App</span>
-      </div>
-    </div>
-    <div class="product-card">
-      <span class="product-status status-dev">In Development</span>
-      <div class="product-title">SVJ SmartTools</div>
-      <p class="product-desc">A suite of free AI-powered web tools — image editors, text analyzers, converters and more — monetized through ads and premium upgrades.</p>
-      <div class="product-tags">
-        <span class="tag">Tools</span><span class="tag">Free</span><span class="tag">Ad Revenue</span><span class="tag">Web</span>
-      </div>
-    </div>
-    <div class="product-card">
-      <span class="product-status status-coming">Coming Soon</span>
-      <div class="product-title">SVJ Mobile Suite</div>
-      <p class="product-desc">A collection of utility and productivity mobile apps targeting high-demand niches — built fast, published to Play Store & App Store for passive income.</p>
-      <div class="product-tags">
-        <span class="tag">Mobile</span><span class="tag">Android</span><span class="tag">iOS</span><span class="tag">Utility</span>
-      </div>
-    </div>
-    <div class="product-card">
-      <span class="product-status status-coming">Coming Soon</span>
-      <div class="product-title">SVJ Niche Platforms</div>
-      <p class="product-desc">Niche web platforms and directories in high-traffic verticals — SEO-optimized, AI-driven, and built to scale through search traffic and affiliate revenue.</p>
-      <div class="product-tags">
-        <span class="tag">SEO</span><span class="tag">Affiliate</span><span class="tag">Niche</span><span class="tag">Platform</span>
-      </div>
-    </div>
-  </div>
-</section>
-
-<div class="section-divider"></div>
-
-<!-- CONTACT -->
-<section id="contact">
-  <div class="reveal">
-    <span class="section-label">// 004 — Contact</span>
-    <h2 class="section-title">Let's Build Together</h2>
-    <div class="section-line"></div>
-  </div>
-  <div class="contact-wrap">
-    <div class="contact-info reveal">
-      <p>Have a project idea, a collaboration proposal, or want to partner with SVJ Tech Labs? We're always open to exciting opportunities. Reach out and let's talk.</p>
-      <div class="contact-item">
-        <span class="contact-icon">📧</span>
-        <div>
-          <div class="contact-label">Email</div>
-          <div class="contact-detail">hello@svjtechlabs.com</div>
+    <div class="products-grid reveal">
+      <div class="product-card">
+        <span class="product-status status-dev">In Development</span>
+        <div class="product-title">SVJ AI Writer</div>
+        <p class="product-desc">An AI-powered content generation platform for blogs, ads, emails, and social media.
+          Built for marketers, creators, and businesses who want to scale content output.</p>
+        <div class="product-tags">
+          <span class="tag">AI</span><span class="tag">SaaS</span><span class="tag">Content</span><span class="tag">Web
+            App</span>
         </div>
       </div>
-      <div class="contact-item">
-        <span class="contact-icon">🌐</span>
-        <div>
-          <div class="contact-label">Website</div>
-          <div class="contact-detail">www.svjtechlabs.com</div>
+      <div class="product-card">
+        <span class="product-status status-dev">In Development</span>
+        <div class="product-title">SVJ SmartTools</div>
+        <p class="product-desc">A suite of free AI-powered web tools — image editors, text analyzers, converters and
+          more — monetized through ads and premium upgrades.</p>
+        <div class="product-tags">
+          <span class="tag">Tools</span><span class="tag">Free</span><span class="tag">Ad Revenue</span><span
+            class="tag">Web</span>
         </div>
       </div>
-      <div class="contact-item">
-        <span class="contact-icon">📍</span>
-        <div>
-          <div class="contact-label">Base</div>
-          <div class="contact-detail">Building Remotely · Global</div>
+      <div class="product-card">
+        <span class="product-status status-coming">Coming Soon</span>
+        <div class="product-title">SVJ Mobile Suite</div>
+        <p class="product-desc">A collection of utility and productivity mobile apps targeting high-demand niches —
+          built fast, published to Play Store &amp; App Store for passive income.</p>
+        <div class="product-tags">
+          <span class="tag">Mobile</span><span class="tag">Android</span><span class="tag">iOS</span><span
+            class="tag">Utility</span>
+        </div>
+      </div>
+      <div class="product-card">
+        <span class="product-status status-coming">Coming Soon</span>
+        <div class="product-title">SVJ Niche Platforms</div>
+        <p class="product-desc">Niche web platforms and directories in high-traffic verticals — SEO-optimized,
+          AI-driven, and built to scale through search traffic and affiliate revenue.</p>
+        <div class="product-tags">
+          <span class="tag">SEO</span><span class="tag">Affiliate</span><span class="tag">Niche</span><span
+            class="tag">Platform</span>
         </div>
       </div>
     </div>
+  </section>
+
+  <div class="section-divider"></div>
+
+  <!-- CONTACT -->
+  <section id="contact">
     <div class="reveal">
-      <form class="contact-form" onsubmit="handleSubmit(event)">
-        <div class="form-group">
-          <label class="form-label">Your Name</label>
-          <input type="text" class="form-input" placeholder="Enter your name" required>
-        </div>
-        <div class="form-group">
-          <label class="form-label">Email Address</label>
-          <input type="email" class="form-input" placeholder="Enter your email" required>
-        </div>
-        <div class="form-group">
-          <label class="form-label">Subject</label>
-          <input type="text" class="form-input" placeholder="What's this about?">
-        </div>
-        <div class="form-group">
-          <label class="form-label">Message</label>
-          <textarea class="form-textarea" placeholder="Tell us about your project or idea..."></textarea>
-        </div>
-        <button type="submit" class="form-submit">Send Message →</button>
-      </form>
+      <span class="section-label">// 004 — Contact</span>
+      <h2 class="section-title">Let's Build Together</h2>
+      <div class="section-line"></div>
     </div>
-  </div>
-</section>
+    <div class="contact-wrap">
+      <div class="contact-info reveal">
+        <p>Have a project idea, a collaboration proposal, or want to partner with SVJ Tech Labs? We're always open to
+          exciting opportunities. Reach out and let's talk.</p>
+        <div class="contact-item">
+          <span class="contact-icon">📧</span>
+          <div>
+            <div class="contact-label">Email</div>
+            <div class="contact-detail">hello@svjtechlabs.com</div>
+          </div>
+        </div>
+        <div class="contact-item">
+          <span class="contact-icon">🌐</span>
+          <div>
+            <div class="contact-label">Website</div>
+            <div class="contact-detail">www.svjtechlabs.com</div>
+          </div>
+        </div>
+        <div class="contact-item">
+          <span class="contact-icon">📍</span>
+          <div>
+            <div class="contact-label">Base</div>
+            <div class="contact-detail">Building Remotely · Global</div>
+          </div>
+        </div>
+      </div>
+      <div class="reveal">
+        <form class="contact-form" id="contactForm" onsubmit="handleSubmit(event)" novalidate>
+          <div class="form-group">
+            <label class="form-label" for="contactName">Your Name</label>
+            <input type="text" id="contactName" name="name" class="form-input" placeholder="Enter your name" required
+              autocomplete="name">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="contactEmail">Email Address</label>
+            <input type="email" id="contactEmail" name="email" class="form-input" placeholder="Enter your email"
+              required autocomplete="email">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="contactSubject">Subject</label>
+            <input type="text" id="contactSubject" name="subject" class="form-input" placeholder="What's this about?">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="contactMessage">Message</label>
+            <textarea id="contactMessage" name="message" class="form-textarea"
+              placeholder="Tell us about your project or idea..."></textarea>
+          </div>
+          <button type="submit" class="form-submit" id="submitBtn">Send Message →</button>
+        </form>
+      </div>
+    </div>
+  </section>
 
-<!-- FOOTER -->
-<footer>
-  <div class="footer-logo">SVJ <span>TECH</span> LABS</div>
-  <div class="footer-links">
-    <a href="#about">About</a>
-    <a href="#services">Services</a>
-    <a href="#products">Products</a>
-    <a href="#contact">Contact</a>
-  </div>
-  <div class="footer-copy">© 2025 SVJ Tech Labs. All rights reserved.</div>
-</footer>
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-logo">SVJ <span>TECH</span> LABS</div>
+    <div class="footer-links">
+      <a href="#about">About</a>
+      <a href="#services">Services</a>
+      <a href="#products">Products</a>
+      <a href="#contact">Contact</a>
+    </div>
+    <div class="footer-copy">© 2025 SVJ Tech Labs. All rights reserved.</div>
+  </footer>
 
-<script>
-  // Custom Cursor
-  const cursor = document.getElementById('cursor');
-  const ring = document.getElementById('cursorRing');
-  let mx = 0, my = 0, rx = 0, ry = 0;
+  <script>
+    /* ═══════════════════════════════════════
+       CUSTOM CURSOR — desktop only
+    ═══════════════════════════════════════ */
+    const cursor = document.getElementById('cursor');
+    const ring = document.getElementById('cursorRing');
 
-  document.addEventListener('mousemove', e => {
-    mx = e.clientX; my = e.clientY;
-    cursor.style.left = mx - 6 + 'px';
-    cursor.style.top = my - 6 + 'px';
-  });
+    // Detect touch device — disable cursor elements
+    const isTouch = window.matchMedia('(hover: none) and (pointer: coarse)').matches;
+    if (isTouch) {
+      cursor.style.display = 'none';
+      ring.style.display = 'none';
+    }
 
-  function animateRing() {
-    rx += (mx - rx) * 0.12;
-    ry += (my - ry) * 0.12;
-    ring.style.left = rx - 18 + 'px';
-    ring.style.top = ry - 18 + 'px';
-    requestAnimationFrame(animateRing);
-  }
-  animateRing();
+    let mx = 0, my = 0, rx = 0, ry = 0;
 
-  document.querySelectorAll('a, button, .service-card, .product-card').forEach(el => {
-    el.addEventListener('mouseenter', () => {
-      cursor.style.transform = 'scale(2)';
-      ring.style.width = '60px';
-      ring.style.height = '60px';
+    if (!isTouch) {
+      document.addEventListener('mousemove', e => {
+        mx = e.clientX; my = e.clientY;
+        cursor.style.left = mx - 6 + 'px';
+        cursor.style.top = my - 6 + 'px';
+      });
+
+      function animateRing() {
+        rx += (mx - rx) * 0.12;
+        ry += (my - ry) * 0.12;
+        ring.style.left = rx - 18 + 'px';
+        ring.style.top = ry - 18 + 'px';
+        requestAnimationFrame(animateRing);
+      }
+      animateRing();
+
+      document.querySelectorAll('a, button, .service-card, .product-card').forEach(el => {
+        el.addEventListener('mouseenter', () => {
+          cursor.style.transform = 'scale(2)';
+          ring.style.width = '60px';
+          ring.style.height = '60px';
+        });
+        el.addEventListener('mouseleave', () => {
+          cursor.style.transform = 'scale(1)';
+          ring.style.width = '36px';
+          ring.style.height = '36px';
+        });
+      });
+    }
+
+    /* ═══════════════════════════════════════
+       HAMBURGER MENU
+    ═══════════════════════════════════════ */
+    const hamburger = document.getElementById('hamburger');
+    const mobileMenu = document.getElementById('mobileMenu');
+
+    function toggleMenu(open) {
+      hamburger.classList.toggle('open', open);
+      mobileMenu.classList.toggle('open', open);
+      hamburger.setAttribute('aria-expanded', String(open));
+      document.body.style.overflow = open ? 'hidden' : '';
+    }
+
+    hamburger.addEventListener('click', () => {
+      const isOpen = mobileMenu.classList.contains('open');
+      toggleMenu(!isOpen);
     });
-    el.addEventListener('mouseleave', () => {
-      cursor.style.transform = 'scale(1)';
-      ring.style.width = '36px';
-      ring.style.height = '36px';
+
+    // Close when a mobile nav link is clicked
+    document.querySelectorAll('.mobile-nav-link').forEach(link => {
+      link.addEventListener('click', () => toggleMenu(false));
     });
-  });
 
-  // Scroll reveal
-  const reveals = document.querySelectorAll('.reveal');
-  const observer = new IntersectionObserver(entries => {
-    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); } });
-  }, { threshold: 0.1 });
-  reveals.forEach(r => observer.observe(r));
+    // Close on Escape key
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape' && mobileMenu.classList.contains('open')) toggleMenu(false);
+    });
 
-  // Form submit
-  function handleSubmit(e) {
-    e.preventDefault();
-    const btn = e.target.querySelector('.form-submit');
-    btn.textContent = '✓ Message Sent!';
-    btn.style.background = 'var(--green)';
-    setTimeout(() => {
-      btn.textContent = 'Send Message →';
-      btn.style.background = 'var(--cyan)';
-      e.target.reset();
-    }, 3000);
-  }
-</script>
+    /* ═══════════════════════════════════════
+       SCROLL REVEAL
+    ═══════════════════════════════════════ */
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          observer.unobserve(e.target); // animate once only
+        }
+      });
+    }, { threshold: 0.08 });
+    reveals.forEach(r => observer.observe(r));
+
+    /* ═══════════════════════════════════════
+       CONTACT FORM
+    ═══════════════════════════════════════ */
+    const toast = document.getElementById('toast');
+    const submitBtn = document.getElementById('submitBtn');
+
+    function showToast(msg, isError = false) {
+      toast.textContent = msg;
+      toast.style.background = isError ? '#ff4466' : 'var(--green)';
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 3500);
+    }
+
+    function handleSubmit(e) {
+      e.preventDefault();
+      const form = e.target;
+      const name = document.getElementById('contactName').value.trim();
+      const email = document.getElementById('contactEmail').value.trim();
+      const emailRx = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+      // Basic validation
+      if (!name) {
+        showToast('⚠ Please enter your name.', true);
+        document.getElementById('contactName').focus();
+        return;
+      }
+      if (!emailRx.test(email)) {
+        showToast('⚠ Please enter a valid email address.', true);
+        document.getElementById('contactEmail').focus();
+        return;
+      }
+
+      // Simulate send
+      submitBtn.textContent = 'Sending…';
+      submitBtn.disabled = true;
+
+      setTimeout(() => {
+        submitBtn.textContent = '✓ Sent!';
+        submitBtn.style.background = 'var(--green)';
+        showToast('✓ Message sent successfully! We\'ll be in touch soon.');
+        form.reset();
+        setTimeout(() => {
+          submitBtn.textContent = 'Send Message →';
+          submitBtn.style.background = 'var(--cyan)';
+          submitBtn.disabled = false;
+        }, 3000);
+      }, 800);
+    }
+
+    /* ═══════════════════════════════════════
+       ACTIVE NAV HIGHLIGHT on scroll
+    ═══════════════════════════════════════ */
+    const sections = document.querySelectorAll('section[id], div[id="hero"]');
+    const navAnchors = document.querySelectorAll('.nav-links a');
+
+    function onScroll() {
+      let current = '';
+      sections.forEach(sec => {
+        const top = sec.getBoundingClientRect().top;
+        if (top <= 80) current = sec.id;
+      });
+      navAnchors.forEach(a => {
+        a.style.color = a.getAttribute('href') === '#' + current ? 'var(--cyan)' : '';
+      });
+    }
+    window.addEventListener('scroll', onScroll, { passive: true });
+  </script>
 </body>
+
 </html>
